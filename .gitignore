@@ -1,0 +1,7 @@
+__pycache__
+saves/*
+eval/outputs/*
+logs/*
+data/*.json
+pred
+eval/*.xlsx
