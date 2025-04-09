@@ -2,12 +2,14 @@
 # Usage: bash scripts.sh [model_path] [model_name] [template]
 # Description: Script to run the DFO training and evaluation pipeline
 # Examples: 
-# bash scripts.sh /home/XiaqiangTang/.cache/Llama-3.1-8B-Instruct test_llama3_1_tang llama3
-# bash scripts.sh /home/XiaqiangTang/.cache/llama-3-8b-instruct test_llama3_tang llama3
-# bash scripts.sh /home/XiaqiangTang/.cache/Qwen2.5-7B-Instruct test_qwen_model_tang qwen
-# set -x
+# bash scripts.sh /home/KeyuHu/.cache/Llama-3.1-8B-Instruct test_llama3_1_hu llama3
+# bash scripts.sh /home/KeyuHu/.cache/Meta-Llama-3-8B-Instruct test_llama3_hu llama3
+# bash scripts.sh /home/KeyuHu/.cache/Qwen2.5-7B-Instruct test_qwen7B_model_hu qwen
+# bash scripts.sh /home/KeyuHu/.cache/Qwen2.5-3B-Instruct test_qwen_model_hu qwen
 
-model_path=${1:-meta-llama/Meta-Llama-3-8B-Instruct}
+set -e
+
+model_path=${1:-Qwen/Qwen2.5-3B-Instruct}
 model_name=${2:-test_model_tang}
 template=${3:-llama3}
 dataset_dir="${model_name}_DFO_data"
@@ -54,7 +56,7 @@ llamafactory-cli train \
     --optim adamw_torch \
     --pref_beta 0.1 \
     --pref_ftx 0 \
-    --pref_loss simpo  \
+    --pref_loss sigmoid  \
     --deepspeed cache/ds_z3_config.json >> logs/${model_name}_run.log 2>&1
 
 echo "Training completed. Model saved at saves/$model_name"
@@ -63,7 +65,7 @@ echo "-------------------- Starting evaluation --------------------"
 cd eval
 
 dfo_model="../saves/${model_name}"
-datasets=( "nqopen" "nqswap" "memo-trap" )
+datasets=( "nqopen" "nqswap" "memo-trap" "DuReader")
 base_model_name=$(basename "$model_path")
 base_dfo_model_name=$(basename "$dfo_model")
 

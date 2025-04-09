@@ -9,13 +9,22 @@ import numpy as np
 import pandas as pd
 import regex as re
 
+from bleurt import score
 from typing import Dict
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.translate import meteor_score
+import bert_score
 
 import numpy as np
 import sacrebleu
 import torch
 from rouge_score import rouge_scorer, scoring
 
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('wordnet')
 # a index list of the sample where the correct context is found in the
 # top-5 retrieved contexts
 quac_correct_retrieved_instance_idx_list = [
@@ -5013,7 +5022,7 @@ def compute_metrics(prediction: str,
     if dataset_name != "memo-trap":
         scores["sub_EM"] = best_em(prediction, sub_ref)
         scores["sub_Subspan_EM"] = best_subspan_em(prediction, sub_ref)
-
+        #部分数据集没有org answer，以下为防报错代码
         scores["org_EM"] = best_em(prediction, org_ref)
         scores["org_Subspan_EM"] = best_subspan_em(prediction, org_ref)
     else:
@@ -5035,6 +5044,61 @@ def em_and_subem(predictions, dataset_name):
         scores = rouge.get_scores(hypotheses, references, avg=True)
         metrics = scores
         return metrics
+
+    # if dataset_name == "eli5":
+    #     if dataset_name == "eli5":
+
+    #         hypotheses = [prediction['predicted_answer'] for prediction in predictions]
+    #         references = [prediction['sub_answer'][0] for prediction in predictions]
+            
+    #         hypotheses_tokenized = [word_tokenize(hyp) for hyp in hypotheses]
+    #         references_tokenized = [word_tokenize(ref) for ref in references]
+            
+    #         # 计算METEOR分数
+    #         scores = [meteor_score.meteor_score([ref], hyp) for ref, hyp in zip(references_tokenized, hypotheses_tokenized)]
+            
+    #         # 计算平均METEOR分数
+    #         metrics = sum(scores) / len(scores)  # 你也可以选择返回单个的平均分数
+    #         return metrics
+
+    # if dataset_name == "eli5":
+
+    #     hypotheses = [prediction['predicted_answer'] for prediction in predictions]
+    #     references = [prediction['sub_answer'][0] for prediction in predictions]
+
+    #     # 加载BLEURT模型
+    #     scorer = score.BleurtScorer()
+
+    #     # 计算BLEURT分数，使用显式参数名称
+    #     scores = scorer.score(references=references, candidates=hypotheses)
+
+    #     # 计算平均BLEURT分数
+    #     metrics = {"average_bleurt_score": sum(scores) / len(scores)}
+    #     return metrics
+
+
+    # if dataset_name == "eli5":
+    #     from transformers import RobertaModel, RobertaTokenizer
+    #     # 加载标准的roberta-large预训练模型
+    #     model_name = "roberta-large"
+    #     model = RobertaModel.from_pretrained(model_name)
+    #     tokenizer = RobertaTokenizer.from_pretrained(model_name)
+
+    #     hypotheses = [prediction['predicted_answer'] for prediction in predictions]
+    #     references = [prediction['sub_answer'][0] for prediction in predictions]
+
+    #     # 计算BERTScore，BERTScore自动处理文本对的计算
+    #     P, R, F1 = bert_score.score(references, hypotheses, lang='en')
+
+    #     # 计算平均P, R, F1得分
+    #     metrics = {
+    #         "average_bert_score_precision": float(P.mean()),
+    #         "average_bert_score_recall": float(R.mean()),
+    #         "average_bert_score_f1": float(F1.mean())
+    #     }
+        
+    #     return metrics
+    
     sub_em_scores = []
     sub_subspan_em_scores = []
     org_em_scores = []
@@ -5086,7 +5150,7 @@ def get_zero_subspan_em_indices(predictions, dataset_name):
             prediction = re.split("\n", sample["predicted_answer"])[0]
 
         if dataset_name == "memo-trap":
-            if [0] not in prediction:
+            if sub_ref[0] not in prediction:
                 zero_subspan_em_indices.append(idx)
         elif dataset_name == "eli5":
             rouge = Rouge()
@@ -5187,10 +5251,22 @@ def get_sub_answers(eval_dataset, ground_truth_file):
             class_list = data.iloc[:, 1]  # Extract the first column
             for class_value, answer_value in zip(class_list, answer_list):
                 sub_answers.append([ast.literal_eval(class_value)[
-                                   answer_value], ast.literal_eval(class_value)[1 - answer_value]])
+                                   answer_value], ast.literal_eval(class_value)[1 - answer_value]])#[right_answer,wrong_answer]
     elif eval_dataset == "nqswap":
         ds = load_dataset("pminervini/NQ-Swap")
         sub_answers = ds['dev']['sub_answer']
+    
+    elif eval_dataset == "DuReader":
+        with open(ground_truth_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            for entry in data['data']:
+                for paragraph in entry['paragraphs']:
+                    for qa in paragraph['qas']:
+                        if 'answers' in qa:
+                            answers = qa['answers']
+                            sub_answers.append([answer['text']
+                                                for answer in answers])
+                            
     elif eval_dataset == "eli5":
         with open(ground_truth_file, 'r', encoding='utf-8') as f:
             data = json.load(f)

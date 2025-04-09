@@ -3,5 +3,6 @@ saves/*
 eval/outputs/*
 logs/*
 data/*.json
+!data/data_info.json
 pred
 eval/*.xlsx

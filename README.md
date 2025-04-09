@@ -41,6 +41,7 @@ Dataset              | Base model Subspan_EM     | DFO model Subspan_EM
 nqopen               | 79.10%                    | 81.54%                   
 nqswap               | 57.10%                    | 75.54%                   
 memo-trap            | 62.86%                    | 69.52% 
+DuReader             | 78.48%                    | 81.51%               
 ```
 
 
@@ -54,20 +55,23 @@ memo-trap            | 62.86%                    | 69.52%
 | nqopen    | 80.23%                | 84.22%               |
 | nqswap    | 66.94%                | 79.12%               |
 | memo-trap | 73.22%                | 76.09%               |
+| DuReader  | 78.26%                | 81.93%               |
 
 ### Llama 3.1 Instruct
 | Dataset   | Base model Subspan_EM | DFO model Subspan_EM |
 |-----------|-----------------------|----------------------|
-| nqopen    | 79.10%                | 81.54%               |
+| nqopen    | 78.83%                | 81.85%               |
 | nqswap    | 57.10%                | 75.54%               |
 | memo-trap | 62.86%                | 69.52%               |
+| DuReader  | 78.48%                | 81.51%               |
 
 ### Qwen2.5-7B-Instruct
 | Dataset   | Base model Subspan_EM | DFO model Subspan_EM |
 |-----------|-----------------------|----------------------|
-| nqopen    | 82.45%                | 83.88%               |
-| nqswap    | 76.55%                | 82.15%               |
-| memo-trap | 53.80%                | 57.11%               |
+| nqopen    | 82.45%                | 86.37%               |
+| nqswap    | 76.99%                | 86.15%               |
+| memo-trap | 53.80%                | 60.11%               |
+| DuReader  | 82.29%                | 85.04%               |
 
 
 
