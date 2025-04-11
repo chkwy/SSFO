@@ -65,7 +65,7 @@ echo "-------------------- Starting evaluation --------------------"
 cd eval
 
 dfo_model="../saves/${model_name}"
-datasets=( "nqopen" "nqswap" "memo-trap" "DuReader")
+datasets=( "nqopen" "nqswap" "memo-trap" "DuReader" "eli5" )
 base_model_name=$(basename "$model_path")
 base_dfo_model_name=$(basename "$dfo_model")
 

@@ -140,17 +140,31 @@ def get_prompt_list(args):
             question = [
                 {
                     "role": "system",
-                    "content": ""},
+                    "content": (
+                        "You are a helpful assistant capable of answering questions based on provided claims. "
+                        "Use the claims in the context to generate accurate and logically derived answers. "
+                        "Each answer should integrate all provided claims and be directly aligned with the question asked."
+                        # "Please provide a clear and concise answer, directly based on the claims provided, without introducing external information."
+                    )
+                },
                 {
                     "role": "user",
-                    "content": "Base on the following claims:\n1." +
-                    data["claims"][0] +
-                    "\n2." +
-                    data["claims"][1] +
-                    "\n3." +
-                    data["claims"][2] +
-                    "\nAnswer the following question: " +
-                    data["question"]},
+                    "content": (
+                        "Here is one example to guide you:\n\n"
+                        "Example:\n"
+                        "Question: How are firms like Snapchat, Uber etc. valued so highly while still not making a profit? Do venture capitalists not expect some form of repayment within a number of years?\n"
+                        "Claims:\n"
+                        "1. Firms like Snapchat and Uber need to establish their brand and amass users before introducing ads.\n"
+                        "2. Introducing ads too early can deter potential users.\n"
+                        "3. Uber is reinvesting a lot of money to make their service better.\n"
+                        "Answer: Yes. Did you watch *The Social Network*? They went a while before introducing ads, so they could make money, as they needed to establish their brand and amass users. Once you have dedicated users, introducing ads won't deter most, but if you are still new, having ads will deter a lot. The same goes for Uber, it's not that they aren't making money, it's that they are reinvesting a ton of it to make their service better.\n\n"
+                        "Now, based on the following claims, answer the following question:\n"
+                        "1. " + data["claims"][0] + "\n"
+                        "2. " + data["claims"][1] + "\n"
+                        "3. " + data["claims"][2] + "\n"
+                        "Answer the following question: " + data["question"]
+                    )
+                }
             ]
             prompt_list.append(
                 tokenizer.apply_chat_template(
