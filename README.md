@@ -4,7 +4,7 @@
 
 This project implements Self-Supervised Faithfulness Optimization (SSFO), a lightweight, self-supervised post-training approach capable of significantly enhancing LLM faithfulness using only minutes of additional training on a few hundred examples.
  Our key insight is that faithfulness alignment can be achieved through contrastive self-guidance without the introduction of extra supervision.
- DFO provides a near out-of-the-box experience, markedly outperforming decoding strategy-based and post-training based methods.
+ SSFO provides a near out-of-the-box experience, markedly outperforming decoding strategy-based and post-training based methods.
 
 ## Requirements
 - Llamafactory
