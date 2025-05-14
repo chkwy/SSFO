@@ -1,8 +1,8 @@
-# <center>DFO: Direct Faithfulness Optimization for Retrieval-Augmented Generation via Lightweight Self-Supervision</center>
+# <center>SSFO: Self-Supervised Faithfulness Optimization for Retrieval-Augmented Generationn</center>
 
 ![alt text](figs/method.png)
 
-This project implements Direct Faithfulness Optimization (DFO), a lightweight, self-supervised post-training approach capable of significantly enhancing LLM faithfulness using only minutes of additional training on a few hundred examples.
+This project implements Self-Supervised Faithfulness Optimization (SSFO), a lightweight, self-supervised post-training approach capable of significantly enhancing LLM faithfulness using only minutes of additional training on a few hundred examples.
  Our key insight is that faithfulness alignment can be achieved through contrastive self-guidance without the introduction of extra supervision.
  DFO provides a near out-of-the-box experience, markedly outperforming decoding strategy-based and post-training based methods.
 
