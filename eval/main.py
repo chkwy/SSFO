@@ -54,7 +54,8 @@ def get_prompt_list(args):
     elif args.eval_dataset == "memo-trap":
         input_datapath = os.path.join(args.data_folder, "memo_trap")
     elif args.eval_dataset == "DuReader":
-        input_datapath = os.path.join(args.data_folder, "DuReader/decoded_dev.json")
+        input_datapath = os.path.join(
+            args.data_folder, "DuReader/decoded_dev.json")
     else:
         raise Exception("please input a correct eval_dataset name!")
 
@@ -76,7 +77,7 @@ def get_prompt_list(args):
                     question,
                     tokenize=False,
                     add_generation_prompt=True))
-            
+
     elif args.eval_dataset == "DuReader":
         prompt_list = []
         data_list = []
@@ -94,14 +95,14 @@ def get_prompt_list(args):
                         prompt = f"根据以下内容:\n{context}\n回答下列问题: {question}\n"
                         questions = [
                             {"role": "system", "content": ""},
-                            {"role": "user", "content": prompt, } 
+                            {"role": "user", "content": prompt, }
                         ]
                         prompt_list.append(
                             tokenizer.apply_chat_template(
                                 questions,
                                 tokenize=False,
                                 add_generation_prompt=True))
-                        
+
     elif args.eval_dataset == "xsum":
         prompt_list = []
         with open(input_datapath, 'r') as f:
@@ -131,7 +132,7 @@ def get_prompt_list(args):
                         question,
                         tokenize=False,
                         add_generation_prompt=True))
-                
+
     elif args.eval_dataset == "eli5":
         prompt_list = []
         data_list = load_data(input_datapath)
@@ -171,7 +172,7 @@ def get_prompt_list(args):
                     question,
                     tokenize=False,
                     add_generation_prompt=True))
-            
+
     else:
         data_list = load_data(input_datapath)
         print("number of samples in the dataset:", len(data_list))
@@ -216,7 +217,8 @@ def main():
 
     for i in range(1):  # set to 3 for 3 times evaluation
         # part 2: generation
-        outputs = model_vllm.generate(prompt_list, sampling_params)#generation
+        outputs = model_vllm.generate(
+            prompt_list, sampling_params)  # generation
         output_list = []
         for output in outputs:
             output_list.append(
@@ -227,27 +229,30 @@ def main():
         output_json_path = os.path.join(
             args.output_folder, f"{args.eval_dataset}_{args.model_id.split('/')[-1]}_output_prompt_{i + 1}.json")
         result = []
-        ground_truths = get_sub_answers(args.eval_dataset, ground_truth_file)#get ground truth
-         
+        ground_truths = get_sub_answers(
+            args.eval_dataset, ground_truth_file)  # get ground truth
+
         if args.eval_dataset == "xsum":
             ground_truths = ["No answer"] * len(prompt_list)
-        
+
         # part 3:save results and args
         for prompt, output, ground_truth in zip(
                 prompt_list, output_list, ground_truths):
             result.append({"prompt": prompt, "output": output,
                           "ground_truth": ground_truth})
         with open(output_json_path, 'w', encoding='utf-8') as json_file:
-            json.dump(result, json_file, ensure_ascii=False, indent=4)#save results
+            json.dump(result, json_file, ensure_ascii=False,
+                      indent=4)  # save results
 
         # Save args to a JSON file
         args_json_path = os.path.join(
             args.output_folder, f"{args.eval_dataset}_{args.model_id.split('/')[-1]}_args_{i + 1}.json")
         with open(args_json_path, 'w') as json_file:
-            json.dump(vars(args), json_file, indent=4)#save args
+            json.dump(vars(args), json_file, indent=4)  # save args
 
         metric_save_file_path = os.path.join(
-            args.output_folder, f"{args.eval_dataset}_{args.model_id.split('/')[-1]}_metrics_{i + 1}.json")#save metrics
+            # save metrics
+            args.output_folder, f"{args.eval_dataset}_{args.model_id.split('/')[-1]}_metrics_{i + 1}.json")
 
         print("-" * 80)
         if args.eval_dataset == "quac":
@@ -256,12 +261,12 @@ def main():
             precision, recall, f1 = evaluate_f1(
                 ground_truth_file, prediction_file)
             metric = {"precision": precision, "recall": recall, "f1": f1}
-        
-        
+
         # Evaluation
-        elif args.eval_dataset == "nqopen" or args.eval_dataset == "triviaqa" or args.eval_dataset == "memo-trap"or args.eval_dataset == "DuReader":
+        elif args.eval_dataset == "nqopen" or args.eval_dataset == "triviaqa" or args.eval_dataset == "memo-trap" or args.eval_dataset == "DuReader":
             text_column = output_list
-            sub_answers = get_sub_answers(args.eval_dataset, ground_truth_file)#get ground truth #list
+            sub_answers = get_sub_answers(
+                args.eval_dataset, ground_truth_file)  # get ground truth #list
 
             assert len(text_column) == len(
                 sub_answers), "The lengths of the columns do not match."
@@ -272,11 +277,11 @@ def main():
                     'predicted_answer': text,
                     'org_answer': [''],
                     'sub_answer': sub_answer
-                })#format data
-                
+                })  # format data
+
             # part 4:calculate metrics
             metric = em_and_subem(data, args.eval_dataset)
-            
+
             # part 5:save zero_subspan_em
             zero_subspan_em_indices = get_zero_subspan_em_indices(
                 data, args.eval_dataset)
@@ -290,7 +295,7 @@ def main():
                     json_file,
                     ensure_ascii=False,
                     indent=4)
-                
+
         elif args.eval_dataset == "eli5":
             text_column = output_list
             sub_answers = get_sub_answers(args.eval_dataset, ground_truth_file)
@@ -318,7 +323,7 @@ def main():
                     json_file,
                     ensure_ascii=False,
                     indent=4)
-                
+
         elif args.eval_dataset == "nqswap":
             ds = load_dataset("pminervini/NQ-Swap")
             org_answers = ds['dev']['org_answer']

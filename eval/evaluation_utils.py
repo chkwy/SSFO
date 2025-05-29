@@ -5022,7 +5022,7 @@ def compute_metrics(prediction: str,
     if dataset_name != "memo-trap":
         scores["sub_EM"] = best_em(prediction, sub_ref)
         scores["sub_Subspan_EM"] = best_subspan_em(prediction, sub_ref)
-        #部分数据集没有org answer，以下为防报错代码
+        # 部分数据集没有org answer，以下为防报错代码
         scores["org_EM"] = best_em(prediction, org_ref)
         scores["org_Subspan_EM"] = best_subspan_em(prediction, org_ref)
     else:
@@ -5050,13 +5050,13 @@ def em_and_subem(predictions, dataset_name):
 
     #         hypotheses = [prediction['predicted_answer'] for prediction in predictions]
     #         references = [prediction['sub_answer'][0] for prediction in predictions]
-            
+
     #         hypotheses_tokenized = [word_tokenize(hyp) for hyp in hypotheses]
     #         references_tokenized = [word_tokenize(ref) for ref in references]
-            
+
     #         # 计算METEOR分数
     #         scores = [meteor_score.meteor_score([ref], hyp) for ref, hyp in zip(references_tokenized, hypotheses_tokenized)]
-            
+
     #         # 计算平均METEOR分数
     #         metrics = sum(scores) / len(scores)  # 你也可以选择返回单个的平均分数
     #         return metrics
@@ -5075,7 +5075,6 @@ def em_and_subem(predictions, dataset_name):
     #     # 计算平均BLEURT分数
     #     metrics = {"average_bleurt_score": sum(scores) / len(scores)}
     #     return metrics
-
 
     # if dataset_name == "eli5":
     #     from transformers import RobertaModel, RobertaTokenizer
@@ -5096,9 +5095,9 @@ def em_and_subem(predictions, dataset_name):
     #         "average_bert_score_recall": float(R.mean()),
     #         "average_bert_score_f1": float(F1.mean())
     #     }
-        
+
     #     return metrics
-    
+
     sub_em_scores = []
     sub_subspan_em_scores = []
     org_em_scores = []
@@ -5251,11 +5250,12 @@ def get_sub_answers(eval_dataset, ground_truth_file):
             class_list = data.iloc[:, 1]  # Extract the first column
             for class_value, answer_value in zip(class_list, answer_list):
                 sub_answers.append([ast.literal_eval(class_value)[
-                                   answer_value], ast.literal_eval(class_value)[1 - answer_value]])#[right_answer,wrong_answer]
+                                   # [right_answer,wrong_answer]
+                                   answer_value], ast.literal_eval(class_value)[1 - answer_value]])
     elif eval_dataset == "nqswap":
         ds = load_dataset("pminervini/NQ-Swap")
         sub_answers = ds['dev']['sub_answer']
-    
+
     elif eval_dataset == "DuReader":
         with open(ground_truth_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -5266,7 +5266,7 @@ def get_sub_answers(eval_dataset, ground_truth_file):
                             answers = qa['answers']
                             sub_answers.append([answer['text']
                                                 for answer in answers])
-                            
+
     elif eval_dataset == "eli5":
         with open(ground_truth_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
