@@ -1,18 +1,17 @@
 #!/bin/bash
 # Usage: bash scripts.sh [model_path] [model_name] [template]
-# Description: Script to run the DFO training and evaluation pipeline
+# Description: Script to run the SSFO training and evaluation pipeline
 # Examples: 
-# bash scripts.sh /home/KeyuHu/.cache/Llama-3.1-8B-Instruct test_llama3_1_hu llama3
-# bash scripts.sh /home/KeyuHu/.cache/Meta-Llama-3-8B-Instruct test_llama3_hu llama3
-# bash scripts.sh /home/KeyuHu/.cache/Qwen2.5-7B-Instruct test_qwen7B_model_hu qwen
-# bash scripts.sh /home/KeyuHu/.cache/Qwen2.5-3B-Instruct test_qwen_model_hu qwen
+# bash scripts.sh Meta-Llama-3-8B-Instruct SSFO_llama3 llama3
+# bash scripts.sh Qwen-7B-Instruct SSFO_qwen qwen
+
 
 set -e
 
-model_path=${1:-Qwen/Qwen2.5-3B-Instruct}
-model_name=${2:-test_model_tang}
+model_path=$1
+model_name=$2
 template=${3:-llama3}
-dataset_dir="${model_name}_DFO_data"
+dataset_dir="${model_name}_SSFO_data"
 
 echo "Model path: $model_path"
 echo "Model name: $model_name"
@@ -20,11 +19,12 @@ echo "Template: $template"
 echo "Dataset dir: $dataset_dir"
 echo "Check out the logs at logs/${model_name}_run.log"
 
-echo "-------------------- Creating DFO data for model $model_name --------------------"
+echo "-------------------- Creating SSFO data for model $model_name --------------------"
 python create_dpo_data.py --model_name $model_name --model_path $model_path >> logs/${model_name}_run.log 2>&1
-echo "DFO data created at $dataset_dir"
+echo "SSFO data created at $dataset_dir"
 
-echo "-------------------- Training DFO model $model_name --------------------"
+echo "-------------------- Training SSFO model $model_name --------------------"
+echo "Learning rate: 1e-06 for batch size=8, you can adjust it based on your GPU memory and model size."
 llamafactory-cli train \
     --stage dpo  \
     --do_train True \
@@ -44,7 +44,7 @@ llamafactory-cli train \
     --lr_scheduler_type cosine \
     --max_grad_norm 1.0 \
     --logging_steps 5 \
-    --save_steps 20 \
+    --save_steps 50 \
     --warmup_steps 10 \
     --packing False \
     --report_to none \
@@ -80,7 +80,7 @@ done
 
 echo "-------------------- Evaluation results --------------------"
 
-printf "%-20s | %-25s | %-25s\n" "Dataset" "Base model Subspan_EM" "DFO model Subspan_EM"
+printf "%-20s | %-25s | %-25s\n" "Dataset" "Base model Subspan_EM" "SSFO model Subspan_EM"
 printf "%-20s-+-%-25s-+-%-25s\n" "$(printf '%.0s-' {1..20})" "$(printf '%.0s-' {1..25})" "$(printf '%.0s-' {1..25})"
 
 for dataset in "${datasets[@]}"; do

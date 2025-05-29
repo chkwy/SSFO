@@ -22,11 +22,11 @@ $bash scripts.sh /home/XiaqiangTang/.cache/Llama-3.1-8B-Instruct test_llama3_1_t
 Model path: /home/XiaqiangTang/.cache/Llama-3.1-8B-Instruct
 Model name: test_llama3_1_tang
 Template: llama3
-Dataset dir: test_llama3_1_tang_DFO_data
+Dataset dir: test_llama3_1_tang_SSFO_data
 Check out the logs at logs/test_llama3_1_tang_run.log
--------------------- Creating DFO data for model test_llama3_1_tang --------------------
-DFO data created at test_llama3_1_tang_DFO_data
--------------------- Training DFO model test_llama3_1_tang --------------------
+-------------------- Creating SSFO data for model test_llama3_1_tang --------------------
+SSFO data created at test_llama3_1_tang_SSFO_data
+-------------------- Training SSFO model test_llama3_1_tang --------------------
 Training completed. Model saved at saves/test_llama3_1_tang
 -------------------- Starting evaluation --------------------
 Evaluating Llama-3.1-8B-Instruct on dataset nqopen
@@ -36,7 +36,7 @@ Evaluating test_llama3_1_tang on dataset nqswap
 Evaluating Llama-3.1-8B-Instruct on dataset memo-trap
 Evaluating test_llama3_1_tang on dataset memo-trap
 -------------------- Evaluation results --------------------
-Dataset              | Base model Subspan_EM     | DFO model Subspan_EM     
+Dataset              | Base model Subspan_EM     | SSFO model Subspan_EM     
 ---------------------+---------------------------+--------------------------
 nqopen               | 79.10%                    | 81.54%                   
 nqswap               | 57.10%                    | 75.54%                   
@@ -50,7 +50,7 @@ DuReader             | 78.48%                    | 81.51%
 ## Detailed Results from Evaluation
 
 ### Llama 3 instruct
-| Dataset   | Base model Subspan_EM | DFO model Subspan_EM |
+| Dataset   | Base model Subspan_EM | SSFO model Subspan_EM |
 |-----------|-----------------------|----------------------|
 | nqopen    | 80.23%                | 84.22%               |
 | nqswap    | 66.94%                | 79.12%               |
@@ -58,7 +58,7 @@ DuReader             | 78.48%                    | 81.51%
 | DuReader  | 78.26%                | 81.93%               |
 
 ### Llama 3.1 Instruct
-| Dataset   | Base model Subspan_EM | DFO model Subspan_EM |
+| Dataset   | Base model Subspan_EM | SSFO model Subspan_EM |
 |-----------|-----------------------|----------------------|
 | nqopen    | 78.83%                | 81.85%               |
 | nqswap    | 57.10%                | 75.54%               |
@@ -66,7 +66,7 @@ DuReader             | 78.48%                    | 81.51%
 | DuReader  | 78.48%                | 81.51%               |
 
 ### Qwen2.5-7B-Instruct
-| Dataset   | Base model Subspan_EM | DFO model Subspan_EM |
+| Dataset   | Base model Subspan_EM | SSFO model Subspan_EM |
 |-----------|-----------------------|----------------------|
 | nqopen    | 82.45%                | 86.37%               |
 | nqswap    | 76.99%                | 86.15%               |

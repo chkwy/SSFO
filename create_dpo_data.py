@@ -102,8 +102,8 @@ def make_DPO_data(y_win, y_loss, inputs_win):
 
 def update_dataset_info(model_name):
     dataset_info = {
-        f"{model_name}_DFO_data": {
-            "file_name": f"{model_name}_DFO_data.json",
+        f"{model_name}_SSFO_data": {
+            "file_name": f"{model_name}_SSFO_data.json",
             "ranking": True,
             "formatting": "sharegpt",
             "columns": {
@@ -138,7 +138,7 @@ def main():
         help="Path to the model")
     args = parser.parse_args()
 
-    data = read_json('data/rag_truth/all_data.json')
+    data = read_json('data/query_context.json')
 
     model_name = args.model_name
     model_path = args.model_path
@@ -176,7 +176,7 @@ def main():
     DPO_data = make_DPO_data(y_win, y_loss, inputs_win)
 
     # Save the augmented data to a new JSON file
-    output_file_path = f'data/{model_name}_DFO_data.json'
+    output_file_path = f'data/{model_name}_SSFO_data.json'
     write_json(DPO_data, output_file_path)
 
     print(f"completed and saved to {output_file_path}")

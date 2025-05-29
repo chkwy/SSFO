@@ -1,0 +1,12 @@
+{
+    "test_llama3_SSFO_data": {
+        "file_name": "test_llama3_SSFO_data.json",
+        "ranking": true,
+        "formatting": "sharegpt",
+        "columns": {
+            "messages": "conversations",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    }
+}
