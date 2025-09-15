@@ -1,8 +1,8 @@
 echo "-------------------- Starting evaluation --------------------"
 cd eval
-ssfo_model=${1:-/data/SSFO/saves/test_qwen_model_tang}
+ssfo_model=$1
 ssfo_name=$(basename "$ssfo_model")
-model_path=${2:-/home/YiWang/SSFO-script/save_models/context-dpo-qwen2.5-7b-instruct}
+model_path=$2
 model_name=$(basename "$model_path")
 datasets=( "nqopen" "nqswap" "memo-trap" )
 base_model_name=$model_name
