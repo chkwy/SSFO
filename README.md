@@ -18,9 +18,9 @@ This project implements Self-Supervised Faithfulness Optimization (SSFO), a ligh
 ## Usage
 The scripts.sh script is used to run data preparation, training, and evaluation phases. It requires three arguments: the model path, experiment name, and chat template name.
 ```shell
-$bash scripts.sh /home/XiaqiangTang/.cache/Llama-3.1-8B-Instruct test_llama3_1_tang llama3
-Model path: /home/XiaqiangTang/.cache/Llama-3.1-8B-Instruct
-Model name: test_llama3_1_tang
+$bash scripts.sh meta-llama/Llama-3.1-8B-Instruct test_exp llama3
+Model path: /home/.cache/Llama-3.1-8B-Instruct
+Exp name: test_exp
 Template: llama3
 Dataset dir: test_llama3_1_tang_SSFO_data
 Check out the logs at logs/test_llama3_1_tang_run.log
