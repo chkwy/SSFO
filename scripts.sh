@@ -19,6 +19,8 @@ echo "Template: $template"
 echo "Dataset dir: $dataset_dir"
 echo "Check out the logs at logs/${model_name}_run.log"
 
+mkdir -p logs
+
 echo "-------------------- Creating SSFO data for model $model_name --------------------"
 python create_dpo_data.py --model_name $model_name --model_path $model_path >> logs/${model_name}_run.log 2>&1
 echo "SSFO data created at $dataset_dir"
